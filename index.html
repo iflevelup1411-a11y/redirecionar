@@ -1,13 +1,315 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=https://suap.ifsertao-pe.edu.br/">
-<script>
-window.location.href="https://suap.ifsertao-pe.edu.br/";
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IFWeather</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                radial-gradient(circle at top, #dff3ff 0%, #f4f7f9 45%, #e9eef2 100%);
+
+            color: #222;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+
+            padding: 42px 30px 32px;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.95);
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.12);
+
+            animation: aparecer 0.7s ease;
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 8px;
+
+            animation: flutuar 3s ease-in-out infinite;
+        }
+
+        h1 {
+            margin: 0;
+
+            font-size: 32px;
+            font-weight: 800;
+
+            color: #1677ff;
+        }
+
+        .subtitulo {
+            margin: 8px 0 25px;
+
+            color: #666;
+
+            font-size: 16px;
+        }
+
+        .status {
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background: #f1f5f8;
+
+            color: #444;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+        .status.sucesso {
+            background: #e9f8ef;
+            color: #176b38;
+        }
+
+        .status.erro {
+            background: #ffecec;
+            color: #a00000;
+        }
+
+        .loader {
+            width: 30px;
+            height: 30px;
+
+            margin: 18px auto 5px;
+
+            border: 3px solid #dce3e8;
+            border-top-color: #1677ff;
+
+            border-radius: 50%;
+
+            animation: girar 0.8s linear infinite;
+        }
+
+        .botao {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 13px 26px;
+
+            border-radius: 12px;
+
+            background: #1677ff;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .botao:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(22, 119, 255, 0.25);
+        }
+
+        .rodape {
+            margin-top: 25px;
+
+            font-size: 12px;
+
+            color: #999;
+        }
+
+        @keyframes girar {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes flutuar {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 35px 22px 28px;
+
+                border-radius: 20px;
+            }
+
+            .icon {
+                font-size: 56px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<p>Redirecionando...</p>
+
+    <div class="container">
+
+        <div class="icon">🌤️</div>
+
+        <h1>IFWeather</h1>
+
+        <p class="subtitulo">
+            Sistema de previsão do tempo
+        </p>
+
+        <div id="status" class="status">
+
+            <div class="loader"></div>
+
+            🔄 Conectando ao servidor...
+
+        </div>
+
+        <div id="botao"></div>
+
+        <div class="rodape">
+            Conexão segura via Cloudflare
+        </div>
+
+    </div>
+
+    <script>   
+
+        const servidor = "https://metres-races-blah-patterns.trycloudflare.com";
+
+
+        function conectar() {
+
+            const status = document.getElementById("status");
+
+            const botao = document.getElementById("botao");
+
+
+            // Verifica se o endereço foi recebido
+
+            if (
+                !servidor ||
+                servidor === "https://metres-races-blah-patterns.trycloudflare.com"
+            ) {
+
+                status.className = "status erro";
+
+                status.innerHTML =
+                    "❌ Endereço do servidor não encontrado.";
+
+                botao.innerHTML = `
+                    <a class="botao"
+                       href="javascript:location.reload()">
+                        🔄 Tentar novamente
+                    </a>
+                `;
+
+                return;
+            }
+
+
+            // Verifica se é um endereço HTTPS do Cloudflare
+
+            if (
+                !/^https:\/\/[a-zA-Z0-9-]+\.trycloudflare\.com\/?$/.test(servidor)
+            ) {
+
+                status.className = "status erro";
+
+                status.innerHTML =
+                    "❌ Endereço do servidor inválido.";
+
+                return;
+            }
+
+
+            // Servidor encontrado
+
+            status.className = "status sucesso";
+
+            status.innerHTML = `
+                ✅ Servidor encontrado!
+                <br>
+                <small>Preparando acesso ao IFWeather...</small>
+            `;
+
+
+            // Botão para entrar imediatamente
+
+            botao.innerHTML = `
+                <a class="botao" href="${servidor}">
+                    ☁️ Entrar no IFWeather
+                </a>
+            `;
+
+
+            // Redireciona automaticamente
+
+            setTimeout(() => {
+
+                window.location.replace(servidor);
+
+            }, 2500);
+
+        }
+
+
+        conectar();
+
+    </script>
+
 </body>
 </html>
