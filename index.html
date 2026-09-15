@@ -226,7 +226,13 @@
 
     </div>
 
-    <script>   
+
+    <script>
+
+        // ==========================================
+        // LINK ATUAL DO SERVIDOR
+        // O MAKE SUBSTITUI ESTA PARTE AUTOMATICAMENTE
+        // ==========================================
 
         const servidor = "https://respondents-push-pin-employed.trycloudflare.com";
 
@@ -238,12 +244,11 @@
             const botao = document.getElementById("botao");
 
 
-            // Verifica se o endereço foi recebido
+            // ==========================================
+            // VERIFICA SE EXISTE UM SERVIDOR
+            // ==========================================
 
-            if (
-                !servidor ||
-                servidor === "https://respondents-push-pin-employed.trycloudflare.com"
-            ) {
+            if (!servidor) {
 
                 status.className = "status erro";
 
@@ -261,7 +266,9 @@
             }
 
 
-            // Verifica se é um endereço HTTPS do Cloudflare
+            // ==========================================
+            // VERIFICA O FORMATO DO LINK
+            // ==========================================
 
             if (
                 !/^https:\/\/[a-zA-Z0-9-]+\.trycloudflare\.com\/?$/.test(servidor)
@@ -276,7 +283,9 @@
             }
 
 
-            // Servidor encontrado
+            // ==========================================
+            // SERVIDOR ENCONTRADO
+            // ==========================================
 
             status.className = "status sucesso";
 
@@ -287,7 +296,9 @@
             `;
 
 
-            // Botão para entrar imediatamente
+            // ==========================================
+            // BOTÃO DE ACESSO
+            // ==========================================
 
             botao.innerHTML = `
                 <a class="botao" href="${servidor}">
@@ -296,7 +307,9 @@
             `;
 
 
-            // Redireciona automaticamente
+            // ==========================================
+            // REDIRECIONAMENTO AUTOMÁTICO
+            // ==========================================
 
             setTimeout(() => {
 
